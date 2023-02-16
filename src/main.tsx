@@ -7,11 +7,14 @@ import {
 import Home from "./pages/Home";
 import Main from "./pages/Main";
 import Mypage from "./pages/Mypage";
+import ErrorPage from "./error-page";
+
 
 const router = createBrowserRouter([
   {
       path: "/",
       element: <Home />,
+      errorElement: <ErrorPage />,
   },
   {
       path: "/main",
