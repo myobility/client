@@ -5,6 +5,7 @@ import { MainButton } from "../components/Main/MainButton";
 import { Clock } from "../components/Clock";
 import { Link } from "react-router-dom";
 
+
 const BtnDiv = styled.div`
   width: 40%;
   display: flex;
@@ -18,6 +19,8 @@ const ImgDiv = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+
 export default function Main() {
   return (
     <>
