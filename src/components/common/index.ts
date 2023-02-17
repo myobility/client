@@ -5,5 +5,5 @@ export const COLOR = {
 export const BUTTON = {
     default: "#7CAA85",
     hover: "#A6C8AD",
-    pressed: "5B8B64",
+    pressed: "#5B8B64",
 };

@@ -6,8 +6,7 @@ export default function Home() {
   return (
     <>
       <Container>
-        <Logo>CARMEET</Logo>
-        <MainButton>랜덤 매칭</MainButton>
+        <Logo/>
       </Container>
     </>
   );
