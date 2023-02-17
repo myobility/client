@@ -1,21 +1,25 @@
-import { useState } from "react";
-import "./App.css";
-import "./agora.ts";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Agora } from "./pages/Agora";
+import { Dynamic } from "./pages/dynamic";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Agora />,
+    },
+    {
+      path: "/Dynamic",
+      element: <Dynamic />,
+    },
+  ]);
 
   return (
-    <div className="App">
-      <div>
-        <button type="button" id="join">
-          Join
-        </button>
-        <button type="button" id="leave">
-          Leave
-        </button>
-      </div>
-    </div>
+    <>
+      <a href="/">AGORA</a>&nbsp;&nbsp;&nbsp;
+      <a href="/dynamic">DYNAMIC</a>
+      <RouterProvider router={router} />
+    </>
   );
 }
 

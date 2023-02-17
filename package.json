@@ -9,9 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "agora-access-token": "^2.0.4",
     "agora-rtc-sdk-ng": "^4.16.1",
+    "axios": "^1.3.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
