@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import axios from "axios";
-import { _tokenURL } from "../global_variable";
+import { _appId, _tokenURL } from "../global_variable";
 
 interface ChannelOptions {
   localAudioTrack: any;
@@ -11,18 +11,24 @@ interface ChannelOptions {
   remoteUid: any;
 }
 
-export const Agora = () => {
-  const [channel, setChannel] = useState<string | any>("");
+type OptionType = {
+  appId: string;
+  channel: string;
+  token: string | null;
+  uid: string | number;
+  serverUrl: string;
+  expiry: string | number;
+};
 
-  let opt = {
-    appId: "375caf4637d54221b4998836c698aa47",
-    channel: "hello",
-    token:
-      "007eJxTYHjmr7e7yNzS2ITn19RVE/98mPyOuUZs98bZjboPz+zd/dNKgcHY3DQ5Mc3EzNg8xdTEyMgwycTS0sLC2CzZzNIiMdHE3Jn1fXJDICMDW5USKyMDBIL4rAwZqTk5+QwMAKOpH6Y=",
+export const Agora = () => {
+  const [option, setOption] = useState<OptionType>({
+    appId: _appId,
+    channel: "",
+    token: null,
     uid: 0,
     serverUrl: _tokenURL,
-    expiry: 60,
-  };
+    expiry: 3600,
+  });
 
   let channelParameters: ChannelOptions = {
     localAudioTrack: null,
@@ -31,18 +37,18 @@ export const Agora = () => {
     remoteVideoTrack: null,
     remoteUid: null,
   };
-  const joinRef = useRef(null);
-  const leaveRef = useRef(null);
+  const joinRef = useRef<HTMLButtonElement>(null);
+  const leaveRef = useRef<HTMLButtonElement>(null);
+  const localVideo = useRef<HTMLDivElement>(null);
+  const remoteVideo = useRef<HTMLDivElement>(null);
 
   const agoraEngine = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-  const remotePlayerContainer = document.createElement("div");
-  const localPlayerContainer = document.createElement("div");
 
   async function FetchToken() {
-    return new Promise(function (resolve) {
+    return new Promise<string>(function (resolve) {
       axios
         .get(
-          `/token/rtc/${opt.channel}/1/uid/${opt.uid}/?expiry=${opt.expiry}`,
+          `/token/rtc/${option.channel}/1/uid/${option.uid}/?expiry=${option.expiry}`,
           {
             withCredentials: true, // 쿠키 cors 통신 설정
           }
@@ -58,21 +64,13 @@ export const Agora = () => {
   }
 
   agoraEngine.on("token-privilege-will-expire", async function () {
-    opt.token = await FetchToken().toString();
-    await agoraEngine.renewToken(opt.token);
+    handleOnChange("token", await FetchToken());
+    option.token && (await agoraEngine.renewToken(option.token));
   });
 
-  const startBasicCall = async () => {
-    localPlayerContainer.id = opt.uid.toString();
-    localPlayerContainer.textContent = "Local user " + opt.uid;
-    localPlayerContainer.style.width = "640px";
-    localPlayerContainer.style.height = "480px";
-    localPlayerContainer.style.padding = "15px 5px 5px 5px";
-
-    remotePlayerContainer.style.width = "640px";
-    remotePlayerContainer.style.height = "480px";
-    remotePlayerContainer.style.padding = "15px 5px 5px 5px";
-
+  const initCall = async () => {
+    console.log("initCall");
+    localVideo.current!.id = option.uid.toString();
     agoraEngine.on("user-published", async (user, mediaType) => {
       await agoraEngine.subscribe(user, mediaType);
       console.log("subscribe success");
@@ -80,13 +78,11 @@ export const Agora = () => {
       if (mediaType == "video") {
         channelParameters.remoteVideoTrack = user.videoTrack;
         channelParameters.remoteAudioTrack = user.audioTrack;
-        channelParameters.remoteUid = user.uid.toString();
-        remotePlayerContainer.id = user.uid.toString();
-        channelParameters.remoteUid = user.uid.toString();
-        remotePlayerContainer.textContent =
-          "Remote user " + user.uid.toString();
-        document.body.append(remotePlayerContainer);
-        channelParameters.remoteVideoTrack.play(remotePlayerContainer);
+        channelParameters.remoteUid = user.uid;
+        remoteVideo.current!.id = user.uid.toString();
+
+        channelParameters.remoteUid = user.uid;
+        channelParameters.remoteVideoTrack.play(remoteVideo.current);
       }
       if (mediaType == "audio") {
         channelParameters.remoteAudioTrack = user.audioTrack;
@@ -99,55 +95,57 @@ export const Agora = () => {
   };
 
   const handleJoine = async () => {
-    if (channel == "") {
+    if (option.channel == "") {
       window.alert("Channel name is required!");
       return;
     }
-    opt.channel = channel;
-    opt.token = await FetchToken().toString();
-
-    await agoraEngine.join(opt.appId, opt.channel, opt.token, opt.uid);
+    handleOnChange("token", await FetchToken());
+    handleOnChange(
+      "uid",
+      await agoraEngine.join(option.appId, option.channel, option.token)
+    );
     channelParameters.localAudioTrack =
       await AgoraRTC.createMicrophoneAudioTrack();
     channelParameters.localVideoTrack = await AgoraRTC.createCameraVideoTrack();
-    document.body.append(localPlayerContainer);
+
     await agoraEngine.publish([
       channelParameters.localAudioTrack,
       channelParameters.localVideoTrack,
     ]);
-    channelParameters.localVideoTrack.play(localPlayerContainer);
+    channelParameters.localVideoTrack.play(localVideo.current);
     console.log("publish success!");
   };
 
   const handleLeave = async () => {
     channelParameters.localAudioTrack.close();
     channelParameters.localVideoTrack.close();
-    removeVideoDiv(remotePlayerContainer.id);
-    removeVideoDiv(localPlayerContainer.id);
     await agoraEngine.leave();
     console.log("You left the channel");
     window.location.reload();
   };
 
-  const removeVideoDiv = (elementId: string) => {
-    console.log("Removing " + elementId + "Div");
-    let Div = document.getElementById(elementId);
-    if (Div) {
-      Div.remove();
-    }
+  const handleOnChange = (key: string, value: string | number) => {
+    setOption((prevState) => {
+      return { ...prevState, [key]: value }; // 새로운 객체 생성
+    });
   };
 
   useEffect(() => {
-    startBasicCall();
+    initCall();
   }, []);
-
   return (
     <div>
       <input
         type="text"
         id="textbox"
-        value={channel}
-        onChange={(e) => setChannel(e.target.value)}
+        value={option.channel}
+        onChange={(e) => handleOnChange("channel", e.target.value)}
+      />
+      <input
+        type="text"
+        id="userID"
+        value={option.uid}
+        onChange={(e) => handleOnChange("uid", e.target.value)}
       />
       <button type="button" id="join" ref={joinRef} onClick={handleJoine}>
         Join
@@ -155,6 +153,30 @@ export const Agora = () => {
       <button type="button" id="leave" ref={leaveRef} onClick={handleLeave}>
         Leave
       </button>
+      <div>
+        <li>token: {option.token}</li>
+        <li>uid: {option.uid}</li>
+        <li>channel: {option.channel}</li>
+      </div>
+      <div
+        style={{
+          width: "300px",
+          height: "200px",
+          backgroundColor: "#ddd",
+          padding: "2rem",
+        }}
+        ref={localVideo}
+      ></div>
+      <br />
+      <div
+        style={{
+          width: "300px",
+          height: "200px",
+          backgroundColor: "#9de",
+          padding: "2rem",
+        }}
+        ref={remoteVideo}
+      ></div>
     </div>
   );
 };
