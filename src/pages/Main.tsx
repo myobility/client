@@ -60,10 +60,10 @@ export default function Main() {
         <Layout>
         <LeafLeft />
           <BtnDiv>
-            <Link to="/">
+            <Link to="/main/matching-room">
               <MainButton>랜덤 매칭</MainButton>
             </Link>
-            <Link to="/">
+            <Link to="/main/matching-room">
               <MainButton>관심사 매칭</MainButton>
             </Link>
             <Link to="/main/mypage">

@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Main from "./pages/Main";
 import Mypage from "./pages/Mypage";
 import ErrorPage from "./error-page";
+import VideoRoom from './pages/VideoRoom';
 
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
       path: "/main",
       element: <Main />,
+  },
+  {
+      path: "/main/matching-room",
+      element: <VideoRoom />,
   },
   {
       path: "/main/mypage",
