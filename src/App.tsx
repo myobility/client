@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./agora.ts";
 
 function App() {
   const [count, setCount] = useState(0);

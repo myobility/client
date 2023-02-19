@@ -6,7 +6,7 @@ export const TagUI = styled.button`
   appearance: none;
   width: 341.43px;
   height: 124.59px;
-  /* background: ${props=>(props.toggle ? 'none': '#7caa85')}; */
+  /* background: ${(props) => (props.toggle ? "none" : "#7caa85")}; */
   background: none;
   color: ${BUTTON.default};
   font-weight: 700;
@@ -26,12 +26,16 @@ export const TagUI = styled.button`
     color: white;
   }
   transition-duration: 0.4s;
-  
+
   margin-right: 2rem;
 `;
 
-export interface BtnProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>,HTMLButtonElement> {
-    tagName: string;
+export interface BtnProps
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
+  tagName: string;
 }
 
 export const TagBtn = (props: BtnProps) => {
