@@ -3,7 +3,8 @@ import io from "socket.io-client";
 
 export const Call = () => {
   const socket = io(
-    "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
+    // "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
+    "http://localhost:3000/",
     {
       withCredentials: true,
     }
