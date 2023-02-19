@@ -6,7 +6,7 @@ export const TagUI = styled.button`
   appearance: none;
   width: 341.43px;
   height: 124.59px;
-  /* background: ${(props) => (props.toggle ? "none" : "#7caa85")}; */
+  /* background: ${(props: any) => (props.toggle ? "none" : "#7caa85")}; */
   background: none;
   color: ${BUTTON.default};
   font-weight: 700;
