@@ -1,16 +1,26 @@
 import { Logo } from "../components/Logo";
 import { Container } from "../components/Container";
 import styled from "styled-components";
-
-export const Layout = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
 import { BUTTON } from "../components/common/index";
 import { Link } from "react-router-dom";
+import { LeafLeft } from "../components/Leafs";
+import { LeafRight } from "../components/Leafs";
+
+
+export const LayoutRow = styled.div`
+  display: flex;
+  flex-direction: row;
+`
+;
+export const LayoutCol = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 104.3rem;
+  padding-bottom: 6rem;
+`;
+
 
 export const StartBtn = styled.button`
   width: 329px;
@@ -23,6 +33,7 @@ export const StartBtn = styled.button`
   border: 0;
   border-radius: 55px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  padding-top: -5rem;
 
   &:hover {
     background-color: ${BUTTON.hover};
@@ -41,12 +52,16 @@ export default function Home() {
   return (
     <>
       <Container>
-        <Layout>
+        <LayoutRow>
+          <LeafLeft/>
+          <LayoutCol>
           <Logo />
           <Link to="/main">
             <StartBtn>시작하기</StartBtn>
           </Link>
-        </Layout>
+          </LayoutCol>
+          <LeafRight/>
+        </LayoutRow>
       </Container>
     </>
   );
