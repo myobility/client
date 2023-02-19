@@ -2,7 +2,9 @@ import { useRef, useState } from "react";
 import io from "socket.io-client";
 
 export const Call = () => {
-  const socket = io("http://localhost:3000");
+  const socket = io("http://localhost:3000", {
+    withCredentials: true,
+  });
   const localVideo = useRef<any>(null);
   const remoteVideo = useRef<any>(null);
   const muteBtn = useRef<any>(null);
