@@ -11,6 +11,7 @@ const MatchBarStyle = styled.div`
   font-size: 3rem;
   font-weight: 700;
   overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(42, 42, 42, 0.25);
 
   display: flex;
   /* visibility: hidden; */

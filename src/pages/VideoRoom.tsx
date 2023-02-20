@@ -79,7 +79,7 @@ export default function VideoRoom() {
         <GreenDiv>
           <FaceArea>
             <FaceDiv
-              style={{ position: "relative", top: "3.4rem", right: "4.3rem" }}
+              style={{ position: "relative", top: "3.4rem", right: "6rem" }}
             />
           </FaceArea>
           <InfoAreaRight>
