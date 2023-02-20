@@ -9,8 +9,8 @@ export const Call = () => {
   const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
 
   const socket = io(
-    "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
-    // "http://localhost:3000",
+    // "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
+    "http://localhost:3000",
     {
       withCredentials: true,
     }
@@ -187,10 +187,10 @@ export const Call = () => {
   socket.on("welcome", async (target_uid) => {
     console.log("상대방이 연결을 하여씁니다.");
     await initCall();
-    // myDataChannel = myPeerConnection.createDataChannel("chat");
-    // myDataChannel.addEventListener("message", (event: any) =>
-    //   console.log(event.data)
-    // );
+    myDataChannel = myPeerConnection.createDataChannel("chat");
+    myDataChannel.addEventListener("message", (event: any) =>
+      console.log(event.data)
+    );
     console.log("made data channel");
     const offer = await myPeerConnection.createOffer();
     console.log("createOffer()");
@@ -214,7 +214,7 @@ export const Call = () => {
     console.log("sent the answer");
   });
 
-  socket.on("answer", (answer) => {
+  socket.on("answer", async (answer) => {
     console.log("received the answer");
     myPeerConnection.setRemoteDescription(answer);
   });
