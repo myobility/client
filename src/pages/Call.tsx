@@ -6,6 +6,7 @@ export const Call = () => {
   const [uid, setUid] = useState<number>(0);
   const [roomName, setRoomName] = useState<string>("");
   const [isMatched, setIsMatched] = useState<boolean>(false);
+  const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
 
   const socket = io(
     // "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
@@ -43,11 +44,11 @@ export const Call = () => {
 
   const getMedia = async (deviceId?: string) => {
     const initialConstrains = {
-      audio: true,
+      audio: false,
       video: { facingMode: "user" },
     };
     const cameraConstraints = {
-      audio: true,
+      audio: false,
       video: { deviceId: { exact: deviceId } },
     };
     try {
@@ -91,9 +92,10 @@ export const Call = () => {
   const initCall = async () => {
     await getMedia();
     makeConnection();
+    console.log("initCall!!!!!!");
   };
 
-  function makeConnection() {
+  const makeConnection = () => {
     myPeerConnection = new RTCPeerConnection({
       iceServers: [
         {
@@ -112,7 +114,7 @@ export const Call = () => {
     myStream.getTracks().forEach((track: any) => {
       myPeerConnection.addTrack(track, myStream);
     });
-  }
+  };
 
   //매칭 시작
   const handleMatching = async () => {
@@ -125,16 +127,20 @@ export const Call = () => {
     }
   };
 
-  const handleWelcomeSubmit = async (event: any) => {
+  const handleMatchStart = () => {
+    socket.emit("join_call", uid, targetUid);
+  };
+
+  const handleWelcomeSubmit = (event: any) => {
     event.preventDefault();
-    await initCall();
+
     socket.emit("join_room", roomName);
     setRoomName("");
   };
 
   function handleIce(data: any) {
     console.log("sent candidate");
-    socket.emit("ice", data.candidate, roomName);
+    socket.emit("ice", data.candidate, uid, targetUid);
   }
 
   function handleAddStream(data: any) {
@@ -162,32 +168,35 @@ export const Call = () => {
     console.log("Connected to Socket.IO server");
   });
 
-  socket.on("matching", (massage) => {
+  socket.on("matching", async (massage) => {
     console.log(massage);
+    await initCall();
     setIsMatched(true);
   });
 
   socket.on("matched", (massage) => {
-    console.log("매칭완료: ", massage);
+    console.log("매칭완료: ", massage.uid);
+    setTargetUid(massage.uid);
   });
-  socket.on("message", (data) => {
-    console.log("Received message: ", data);
-  });
-  socket.on("welcome", async () => {
+
+  //대기 중 사용자가 들어왔을 때
+  socket.on("welcome", async (target_uid) => {
+    console.log("상대방이 연결을 하여씁니다.");
     myDataChannel = myPeerConnection.createDataChannel("chat");
-    myDataChannel.addEventListener("message", (event: MessageEvent) =>
+    myDataChannel.addEventListener("message", (event: any) =>
       console.log(event.data)
     );
     console.log("made data channel");
     const offer = await myPeerConnection.createOffer();
     myPeerConnection.setLocalDescription(offer);
-    socket.emit("offer", offer, roomName);
+    socket.emit("offer", offer, uid, target_uid);
   });
 
-  socket.on("offer", async (offer) => {
+  socket.on("offer", async (offer: any) => {
+    console.log("OFFERING!!");
     myPeerConnection.addEventListener("datachannel", (event: any) => {
       myDataChannel = event.channel;
-      myDataChannel.addEventListener("message", (event: MessageEvent) =>
+      myDataChannel.addEventListener("message", (event: any) =>
         console.log(event.data)
       );
     });
@@ -195,7 +204,7 @@ export const Call = () => {
     myPeerConnection.setRemoteDescription(offer);
     const answer = await myPeerConnection.createAnswer();
     myPeerConnection.setLocalDescription(answer);
-    socket.emit("answer", answer, roomName);
+    socket.emit("answer", answer, uid, targetUid);
     console.log("sent the answer");
   });
 
@@ -215,6 +224,12 @@ export const Call = () => {
     <>
       <h1>My UID: {uid}</h1>
       {!isMatched && <button onClick={handleMatching}>매칭</button>}
+      {targetUid && (
+        <>
+          <h3>{targetUid} 유저와 통화하겠습니까?</h3>
+          <button onClick={handleMatchStart}>통화하기</button>
+        </>
+      )}
       <form onSubmit={handleWelcomeSubmit}>
         <input
           type="text"
