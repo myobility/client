@@ -1,18 +1,21 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
+import { Coordinates, Position } from "../types";
 
 export const Call = () => {
+  const [uid, setUid] = useState<number>(0);
+  const [roomName, setRoomName] = useState<string>("");
+  const [isMatched, setIsMatched] = useState<boolean>(false);
+
   const socket = io(
     // "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
-    "http://localhost:3000/",
+    "http://localhost:3000",
     {
       withCredentials: true,
     }
   );
   const localVideo = useRef<any>(null);
   const remoteVideo = useRef<any>(null);
-  const muteBtn = useRef<any>(null);
-  const cameraBtn = useRef<any>(null);
 
   let myStream: any;
   let muted = false;
@@ -85,18 +88,11 @@ export const Call = () => {
     }
   }
 
-  const [roomName, setRoomName] = useState<string>("");
-
   const initCall = async () => {
     await getMedia();
     makeConnection();
   };
-  const handleWelcomeSubmit = async (event: any) => {
-    event.preventDefault();
-    await initCall();
-    socket.emit("join_room", roomName);
-    setRoomName("");
-  };
+
   function makeConnection() {
     myPeerConnection = new RTCPeerConnection({
       iceServers: [
@@ -118,6 +114,24 @@ export const Call = () => {
     });
   }
 
+  //매칭 시작
+  const handleMatching = async () => {
+    const newUid = Date.now();
+    try {
+      socket.emit("matching", newUid, await getCurrentLocation());
+      setUid(newUid);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleWelcomeSubmit = async (event: any) => {
+    event.preventDefault();
+    await initCall();
+    socket.emit("join_room", roomName);
+    setRoomName("");
+  };
+
   function handleIce(data: any) {
     console.log("sent candidate");
     socket.emit("ice", data.candidate, roomName);
@@ -127,10 +141,35 @@ export const Call = () => {
     remoteVideo.current.srcObject = data.stream;
   }
 
+  const getCurrentLocation = async (): Promise<Coordinates> => {
+    return new Promise<Coordinates>((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject("Geolocation is not supported by this browser.");
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position: Position) => {
+          const { latitude, longitude, accuracy } = position.coords;
+          resolve({ latitude, longitude, accuracy });
+        },
+        (error) => reject(error)
+      );
+    });
+  };
+
   socket.on("connect", () => {
+    //socket 서버 연결완료
     console.log("Connected to Socket.IO server");
   });
 
+  socket.on("matching", (massage) => {
+    console.log(massage);
+    setIsMatched(true);
+  });
+
+  socket.on("matched", (massage) => {
+    console.log("매칭완료: ", massage);
+  });
   socket.on("message", (data) => {
     console.log("Received message: ", data);
   });
@@ -170,8 +209,12 @@ export const Call = () => {
     myPeerConnection.addIceCandidate(ice);
   });
 
+  useEffect(() => {}, []);
+
   return (
     <>
+      <h1>My UID: {uid}</h1>
+      {!isMatched && <button onClick={handleMatching}>매칭</button>}
       <form onSubmit={handleWelcomeSubmit}>
         <input
           type="text"
@@ -183,12 +226,8 @@ export const Call = () => {
       </form>
       <h1>local</h1>
       <video autoPlay playsInline ref={localVideo}></video>
-      <button onClick={handleMuteClick} ref={muteBtn}>
-        mute
-      </button>
-      <button onClick={handleCameraClick} ref={cameraBtn}>
-        hide
-      </button>
+      <button onClick={handleMuteClick}>mute</button>
+      <button onClick={handleCameraClick}>hide</button>
       <h1>Remote</h1>
       <video autoPlay playsInline ref={remoteVideo}></video>
     </>
