@@ -69,10 +69,10 @@ export const Call = () => {
       .getAudioTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
     if (!muted) {
-      muteBtn.current.innerText = "Unmute";
+      // muteBtn.current.innerText = "Unmute";
       muted = true;
     } else {
-      muteBtn.current.innerText = "Mute";
+      // muteBtn.current.innerText = "Mute";
       muted = false;
     }
   }
