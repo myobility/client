@@ -6,6 +6,9 @@ import { GreenContainer } from "../components/VideoRoom/GreenContainer";
 import { HalfContainer } from "../components/VideoRoom/HalfContainer";
 import { FaceDiv } from "../components/VideoRoom/FaceDiv";
 import { Heartbeat } from "../components/VideoRoom/Heartbeat";
+import { Outlet } from "react-router-dom";
+
+
 
 const FaceArea = styled.div`
   display: flex;
@@ -48,7 +51,8 @@ const GreenDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-right: 6rem;
+  position: relative;
+  right: 11rem;
 `;
 
 export default function VideoRoom() {
@@ -58,11 +62,12 @@ export default function VideoRoom() {
         <HalfContainer>
           <FaceArea>
             <FaceDiv
-              style={{ position: "relative", top: "5.5rem", left: "11rem" }}
-            />
+              style={{ position: "relative", top: "5.5rem", left: "15rem" }}
+              />
           </FaceArea>
           <InfoArea>
             <Heartbeat bpm={97} />
+            {/* <Loading></Loading> */}
             <TagsArea>
               <TagLeft tagName="여행" />
               <TagLeft tagName="노래" />
@@ -70,6 +75,7 @@ export default function VideoRoom() {
             </TagsArea>
           </InfoArea>
         </HalfContainer>
+              <Outlet/>
         <GreenDiv>
           <FaceArea>
             <FaceDiv
@@ -77,7 +83,7 @@ export default function VideoRoom() {
             />
           </FaceArea>
           <InfoAreaRight>
-            <Heartbeat bpm={97} />
+            <Heartbeat bpm={122} />
             <TagsAreaRight>
               <TagRight tagName="여행" />
               <TagRight tagName="노래" />

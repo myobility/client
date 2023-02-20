@@ -8,4 +8,5 @@ export const BUTTON = {
     hover: "#A6C8AD",
     pressed: "#5B8B64",
     heartbeat: "#DA7149",
+    gauge: "#C36642",
 };
