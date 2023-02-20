@@ -55,6 +55,7 @@ export const Call = () => {
       myStream = await navigator.mediaDevices.getUserMedia(
         deviceId ? cameraConstraints : initialConstrains
       );
+      console.log("[1] getUserMedia()");
       localVideo.current.srcObject = myStream;
       if (!deviceId) {
         await getCameras();
@@ -111,6 +112,7 @@ export const Call = () => {
     });
     myPeerConnection.addEventListener("icecandidate", handleIce);
     myPeerConnection.addEventListener("addstream", handleAddStream);
+    console.log("[2] addStream()");
     myStream.getTracks().forEach((track: any) => {
       myPeerConnection.addTrack(track, myStream);
     });
@@ -127,7 +129,8 @@ export const Call = () => {
     }
   };
 
-  const handleMatchStart = () => {
+  const handleMatchStart = async () => {
+    await initCall();
     socket.emit("join_call", uid, targetUid);
   };
 
@@ -144,6 +147,7 @@ export const Call = () => {
   }
 
   function handleAddStream(data: any) {
+    console.log("Remoted!!!!!!!!!!!!!!!!!");
     remoteVideo.current.srcObject = data.stream;
   }
 
@@ -168,9 +172,9 @@ export const Call = () => {
     console.log("Connected to Socket.IO server");
   });
 
-  socket.on("matching", async (massage) => {
+  socket.on("matching", (massage) => {
     console.log(massage);
-    await initCall();
+    // await initCall();
     setIsMatched(true);
   });
 
@@ -182,18 +186,20 @@ export const Call = () => {
   //대기 중 사용자가 들어왔을 때
   socket.on("welcome", async (target_uid) => {
     console.log("상대방이 연결을 하여씁니다.");
-    myDataChannel = myPeerConnection.createDataChannel("chat");
-    myDataChannel.addEventListener("message", (event: any) =>
-      console.log(event.data)
-    );
+    await initCall();
+    // myDataChannel = myPeerConnection.createDataChannel("chat");
+    // myDataChannel.addEventListener("message", (event: any) =>
+    //   console.log(event.data)
+    // );
     console.log("made data channel");
     const offer = await myPeerConnection.createOffer();
+    console.log("createOffer()");
     myPeerConnection.setLocalDescription(offer);
+    console.log("welcome setLocalDescription()");
     socket.emit("offer", offer, uid, target_uid);
   });
 
   socket.on("offer", async (offer: any) => {
-    console.log("OFFERING!!");
     myPeerConnection.addEventListener("datachannel", (event: any) => {
       myDataChannel = event.channel;
       myDataChannel.addEventListener("message", (event: any) =>
