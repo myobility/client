@@ -82,10 +82,10 @@ export const Call = () => {
       .getVideoTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
     if (cameraOff) {
-      cameraBtn.current.innerText = "Turn Camera Off";
+      // cameraBtn.current.innerText = "Turn Camera Off";
       cameraOff = false;
     } else {
-      cameraBtn.current.innerText = "Turn Camera On";
+      // cameraBtn.current.innerText = "Turn Camera On";
       cameraOff = true;
     }
   }
