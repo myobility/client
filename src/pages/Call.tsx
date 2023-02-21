@@ -9,7 +9,8 @@ export const Call = () => {
   const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
 
   const socket = io(
-    "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
+    // "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
+    "http://localhost:3000/", //로컬 테스트용
     {
       withCredentials: true,
     }
@@ -134,11 +135,8 @@ export const Call = () => {
     await initCall();
   };
 
-  const handleWelcomeSubmit = (event: any) => {
-    event.preventDefault();
-
-    socket.emit("join_room", roomName);
-    setRoomName("");
+  const handleReMatch = async () => {
+    socket.emit("re_match", uid, targetUid, await getCurrentLocation());
   };
 
   function handleIce(data: any) {
@@ -180,8 +178,14 @@ export const Call = () => {
   });
 
   socket.on("matched", (massage) => {
-    console.log("매칭완료: ", massage.uid);
-    setTargetUid(massage.uid);
+    console.log("매칭완료: ", massage);
+    setTargetUid(massage);
+  });
+
+  socket.on("cancel_match", async () => {
+    console.log("상대방이 매칭을 취소하였습니다.: ");
+    setIsMatched(false);
+    socket.emit("matching", uid, await getCurrentLocation());
   });
 
   //대기 중 사용자가 들어왔을 때
@@ -242,17 +246,9 @@ export const Call = () => {
         <>
           <h3>{targetUid} 유저와 통화하겠습니까?</h3>
           <button onClick={handleMatchStart}>통화하기</button>
+          <button onClick={handleReMatch}>넘기기</button>
         </>
       )}
-      <form onSubmit={handleWelcomeSubmit}>
-        <input
-          type="text"
-          placeholder="room name"
-          value={roomName}
-          onChange={(e) => setRoomName(e.target.value)}
-        />
-        <input type="submit" value="입장" />
-      </form>
       <h1>local</h1>
       <video autoPlay playsInline ref={localVideo}></video>
       <button onClick={handleMuteClick}>mute</button>
