@@ -9,8 +9,8 @@ export const Call = () => {
   const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
 
   const socket = io(
-    // "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
-    "http://localhost:3000",
+    "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
+    // "http://localhost:3000",
     {
       withCredentials: true,
     }
