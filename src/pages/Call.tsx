@@ -9,14 +9,14 @@ export const Call = () => {
   const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
 
   const socket = io(
-    "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
-    // "http://localhost:3000",
+    // "https://port-0-server-node-r8xoo2mlebpgk2c.sel3.cloudtype.app/",
+    "http://localhost:3000",
     {
       withCredentials: true,
     }
   );
-  const localVideo = useRef<any>(null);
-  const remoteVideo = useRef<any>(null);
+  const localVideo = useRef<HTMLVideoElement>(null);
+  const remoteVideo = useRef<HTMLVideoElement>(null);
 
   let myStream: any;
   let muted = false;
@@ -44,11 +44,11 @@ export const Call = () => {
 
   const getMedia = async (deviceId?: string) => {
     const initialConstrains = {
-      audio: false,
+      audio: true,
       video: { facingMode: "user" },
     };
     const cameraConstraints = {
-      audio: false,
+      audio: true,
       video: { deviceId: { exact: deviceId } },
     };
     try {
@@ -56,7 +56,8 @@ export const Call = () => {
         deviceId ? cameraConstraints : initialConstrains
       );
       console.log("[1] getUserMedia()");
-      localVideo.current.srcObject = myStream;
+      console.log("MyStream: ", myStream);
+      localVideo.current!.srcObject = myStream;
       if (!deviceId) {
         await getCameras();
       }
@@ -93,7 +94,6 @@ export const Call = () => {
   const initCall = async () => {
     await getMedia();
     makeConnection();
-    console.log("initCall!!!!!!");
   };
 
   const makeConnection = () => {
@@ -127,11 +127,12 @@ export const Call = () => {
     } catch (error) {
       console.log(error);
     }
+    // await initCall();
   };
 
   const handleMatchStart = async () => {
-    await initCall();
     socket.emit("join_call", uid, targetUid);
+    await initCall();
   };
 
   const handleWelcomeSubmit = (event: any) => {
@@ -148,7 +149,8 @@ export const Call = () => {
 
   function handleAddStream(data: any) {
     console.log("Remoted!!!!!!!!!!!!!!!!!");
-    remoteVideo.current.srcObject = data.stream;
+    console.log("RemoteStream: ", data.stream);
+    remoteVideo.current!.srcObject = data.stream;
   }
 
   const getCurrentLocation = async (): Promise<Coordinates> => {
@@ -193,7 +195,7 @@ export const Call = () => {
     );
     console.log("made data channel");
     const offer = await myPeerConnection.createOffer();
-    console.log("createOffer()");
+    console.log("welcome createOffer()");
     myPeerConnection.setLocalDescription(offer);
     console.log("welcome setLocalDescription()");
     socket.emit("offer", offer, uid, target_uid);
@@ -208,8 +210,11 @@ export const Call = () => {
     });
     console.log("received the offer");
     myPeerConnection.setRemoteDescription(offer);
+    console.log("offer setRemoteDescription()");
     const answer = await myPeerConnection.createAnswer();
+    console.log("offer createAnswer()");
     myPeerConnection.setLocalDescription(answer);
+    console.log("offer setLocalDescription()");
     socket.emit("answer", answer, uid, targetUid);
     console.log("sent the answer");
   });
@@ -217,14 +222,16 @@ export const Call = () => {
   socket.on("answer", async (answer) => {
     console.log("received the answer");
     myPeerConnection.setRemoteDescription(answer);
+    console.log("answer setRemoteDescription()");
   });
 
   socket.on("ice", (ice) => {
     console.log("received candidate");
     myPeerConnection.addIceCandidate(ice);
+    console.log("ice addIceCandidate()");
   });
 
-  useEffect(() => {}, []);
+  // useEffect(() => {}, []);
 
   return (
     <>
@@ -250,7 +257,7 @@ export const Call = () => {
       <button onClick={handleMuteClick}>mute</button>
       <button onClick={handleCameraClick}>hide</button>
       <h1>Remote</h1>
-      <video autoPlay playsInline ref={remoteVideo}></video>
+      <video id="peerFace" autoPlay playsInline ref={remoteVideo}></video>
     </>
   );
 };
