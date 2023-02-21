@@ -44,7 +44,6 @@ export const Matching = () => {
 
   const matched = () => {
     setMatching((prev) => !prev);
-    console.log("hello");
   };
 
   return (

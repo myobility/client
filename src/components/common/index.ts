@@ -9,4 +9,5 @@ export const BUTTON = {
     pressed: "#5B8B64",
     heartbeat: "#DA7149",
     gauge: "#C36642",
+    white: "#fff",
 };
