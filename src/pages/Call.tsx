@@ -9,8 +9,8 @@ export const Call = () => {
   const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
 
   const socket = io(
-    "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
-    // "http://localhost:3000/", //로컬 테스트용
+    // "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
+    "http://localhost:3000/", //로컬 테스트용
     {
       withCredentials: true,
     }
@@ -171,13 +171,13 @@ export const Call = () => {
     console.log("Connected to Socket.IO server");
   });
 
-  socket.on("matching", (massage) => {
+  socket.on("matching", (massage: any) => {
     console.log(massage);
     // await initCall();
     setIsMatched(true);
   });
 
-  socket.on("matched", (massage) => {
+  socket.on("matched", (massage: any) => {
     console.log("매칭완료: ", massage);
     setTargetUid(massage);
   });
@@ -189,7 +189,7 @@ export const Call = () => {
   });
 
   //대기 중 사용자가 들어왔을 때
-  socket.on("welcome", async (target_uid) => {
+  socket.on("welcome", async (target_uid: any) => {
     console.log("상대방이 연결을 하여씁니다.");
     await initCall();
     // myDataChannel = myPeerConnection.createDataChannel("chat");
@@ -222,14 +222,14 @@ export const Call = () => {
     console.log("sent the answer");
   });
 
-  socket.on("answer", async (answer) => {
+  socket.on("answer", async (answer: any) => {
     console.log("received the answer");
     myPeerConnection.setRemoteDescription(answer);
     console.log("answer ", answer);
     console.log("answer setRemoteDescription()");
   });
 
-  socket.on("ice", (ice) => {
+  socket.on("ice", (ice: any) => {
     console.log("received candidate");
     myPeerConnection.addIceCandidate(ice);
     console.log("ice ", ice);
