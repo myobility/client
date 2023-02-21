@@ -189,10 +189,10 @@ export const Call = () => {
   socket.on("welcome", async (target_uid) => {
     console.log("상대방이 연결을 하여씁니다.");
     await initCall();
-    myDataChannel = myPeerConnection.createDataChannel("chat");
-    myDataChannel.addEventListener("message", (event: any) =>
-      console.log(event.data)
-    );
+    // myDataChannel = myPeerConnection.createDataChannel("chat");
+    // myDataChannel.addEventListener("message", (event: any) =>
+    //   console.log(event.data)
+    // );
     console.log("made data channel");
     const offer = await myPeerConnection.createOffer();
     console.log("welcome createOffer()");
@@ -202,12 +202,12 @@ export const Call = () => {
   });
 
   socket.on("offer", async (offer: any) => {
-    myPeerConnection.addEventListener("datachannel", (event: any) => {
-      myDataChannel = event.channel;
-      myDataChannel.addEventListener("message", (event: any) =>
-        console.log(event.data)
-      );
-    });
+    // myPeerConnection.addEventListener("datachannel", (event: any) => {
+    //   myDataChannel = event.channel;
+    //   myDataChannel.addEventListener("message", (event: any) =>
+    //     console.log(event.data)
+    //   );
+    // });
     console.log("received the offer");
     myPeerConnection.setRemoteDescription(offer);
     console.log("offer setRemoteDescription()");
@@ -222,12 +222,14 @@ export const Call = () => {
   socket.on("answer", async (answer) => {
     console.log("received the answer");
     myPeerConnection.setRemoteDescription(answer);
+    console.log("answer ", answer);
     console.log("answer setRemoteDescription()");
   });
 
   socket.on("ice", (ice) => {
     console.log("received candidate");
     myPeerConnection.addIceCandidate(ice);
+    console.log("ice ", ice);
     console.log("ice addIceCandidate()");
   });
 
