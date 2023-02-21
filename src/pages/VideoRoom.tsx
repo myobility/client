@@ -1,14 +1,14 @@
 import styled from "styled-components";
 import { TagLeft } from "../components/VideoRoom/TagLeft";
 import { TagRight } from "../components/VideoRoom/TagRight";
-import { Container } from "../components/Container";
-import { GreenContainer } from "../components/VideoRoom/GreenContainer";
+import { COLOR } from "../components/common";
 import { HalfContainer } from "../components/VideoRoom/HalfContainer";
+import { GreenContainer } from "../components/VideoRoom/GreenContainer";
 import { FaceDiv } from "../components/VideoRoom/FaceDiv";
 import { Heartbeat } from "../components/VideoRoom/Heartbeat";
 import { Outlet } from "react-router-dom";
-
-
+import { Matching } from "../components/VideoRoom/Matching";
+import Loading from "../components/VideoRoom/Loading";
 
 const FaceArea = styled.div`
   display: flex;
@@ -52,7 +52,17 @@ const GreenDiv = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-  right: 11rem;
+  right: 22rem;
+`;
+
+const MatchInfoDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  right: 1rem;
 `;
 
 export default function VideoRoom() {
@@ -63,7 +73,7 @@ export default function VideoRoom() {
           <FaceArea>
             <FaceDiv
               style={{ position: "relative", top: "5.5rem", left: "15rem" }}
-              />
+            />
           </FaceArea>
           <InfoArea>
             <Heartbeat bpm={97} />
@@ -75,7 +85,11 @@ export default function VideoRoom() {
             </TagsArea>
           </InfoArea>
         </HalfContainer>
-              <Outlet/>
+        <MatchInfoDiv>
+          <Matching />
+          <Loading />
+        </MatchInfoDiv>
+          <Outlet />
         <GreenDiv>
           <FaceArea>
             <FaceDiv

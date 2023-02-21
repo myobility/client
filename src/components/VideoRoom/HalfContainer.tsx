@@ -3,12 +3,12 @@ import { COLOR } from "../common/index";
 
 export const HalfContainer = styled.div`
   background-color: ${COLOR.background};
-  min-width: 1144px;
+  min-width: 1122px;
   height: 832px;
   position: relative;
-  left: 3rem;
+  left: 15rem;
   padding-left: 1rem;
-  padding-right: 5rem;
+  padding-right: 4rem;
   z-index: 10;
 
   display: flex;

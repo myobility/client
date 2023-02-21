@@ -3,16 +3,15 @@ import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-  BrowserRouter,
 } from "react-router-dom";
 import Home from "./pages/Home";
 import Main from "./pages/Main";
 import Mypage from "./pages/Mypage";
 import ErrorPage from "./error-page";
 import VideoRoom from "./pages/VideoRoom";
-import { MatchBar } from "./components/MatchBar";
-import { HiddenMatchBar } from "./components/HiddenMatchBar";
-import App from "./App";
+import { MatchBar } from "./components/VideoRoom/MatchBar";
+import { HiddenMatchBar } from "./components/VideoRoom/HiddenMatchBar";
+
 
 const router = createBrowserRouter([
   {
@@ -30,8 +29,8 @@ const router = createBrowserRouter([
     element: <VideoRoom />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <HiddenMatchBar/>},
-      { path: "matched", element: <MatchBar/>},
+      { index: true, element: <HiddenMatchBar/> },
+      { path: "matched", element: <MatchBar/> },
     ]
   },
   {
@@ -41,11 +40,9 @@ const router = createBrowserRouter([
   },
 ]);
 
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    {/* <BrowserRouter> */}
       <RouterProvider router={router} />
-      {/* <App/> */}
-    {/* </BrowserRouter> */}
   </React.StrictMode>
 );

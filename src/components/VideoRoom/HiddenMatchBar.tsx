@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import { BUTTON } from "./common";
+import { BUTTON } from "../common";
 
-const MatchBarStyle = styled.div`
+const HiddenMatchBarStyle = styled.div`
   background-color: ${BUTTON.heartbeat};
   z-index: 15;
-  min-width: 22rem;
+  min-width: 32rem;
   height: 6.3rem;
   border-radius: 54px;
   color: white;
@@ -14,21 +14,18 @@ const MatchBarStyle = styled.div`
   box-shadow: 0px 4px 10px rgba(42, 42, 42, 0.25);
 
   display: flex;
-  /* visibility: hidden; */
+  visibility: hidden;
   justify-content: center;
   align-items: center;
   position: relative;
-  right: 17rem;
+  right: 32.8rem;
   margin-top: auto;
   bottom: 7rem;
-  padding-right: 9rem;
-  padding-left: 9rem;
-
 `;
 
 const Animation = styled.div`
   z-index: 20;
-  min-width: 40rem;
+  min-width: 32rem;
   height: 6.3rem;
   background-color: ${BUTTON.gauge};
   border-radius: 54px;
@@ -42,24 +39,22 @@ const Animation = styled.div`
     transform-origin: 0 100%;
     transition: transform 10s;
   }
-
-  clip: rect(4rem 4rem 4rem 4rem);
 `;
 
 const Ptag = styled.div`
   z-index: 25;
   min-width: 35rem;
   position: relative;
-  right: 11rem;
+  right: 7rem;
 `;
 
-export const MatchBar = () => {
+export const HiddenMatchBar = () => {
   return (
     <>
-      <MatchBarStyle>
+      <HiddenMatchBarStyle>
         <Animation></Animation>
         <Ptag>다른 상대 찾기</Ptag>
-      </MatchBarStyle>
+      </HiddenMatchBarStyle>
     </>
   );
 };
