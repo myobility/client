@@ -9,7 +9,7 @@ export const Call = () => {
   const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
 
   const socket = io(
-    "http://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
+    "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
     {
       withCredentials: true,
     }
