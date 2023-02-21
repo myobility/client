@@ -13,6 +13,9 @@ export const Call = () => {
     // "http://localhost:3000",
     {
       withCredentials: true,
+      extraHeaders: {
+        "my-custom-header": "abcd"
+      }
     }
   );
   const localVideo = useRef<HTMLVideoElement>(null);
