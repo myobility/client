@@ -9,13 +9,9 @@ export const Call = () => {
   const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
 
   const socket = io(
-    "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
-    // "http://localhost:3000",
+    "http://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
     {
       withCredentials: true,
-      extraHeaders: {
-        "my-custom-header": "abcd"
-      }
     }
   );
   const localVideo = useRef<HTMLVideoElement>(null);
