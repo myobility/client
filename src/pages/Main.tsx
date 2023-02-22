@@ -10,18 +10,18 @@ import LeafLeftSrc from "../img/bg_left_leaf.png";
 import LeafRightSrc from "../img/bg_right_leaf.png";
 
 export const LeafLeft = styled.img.attrs({
-    src: `${LeafLeftSrc}`
+  src: `${LeafLeftSrc}`,
 })`
-    align-self: flex-end;
-    z-index: 1;
-`
+  align-self: flex-end;
+  z-index: 1;
+`;
 
 export const LeafRight = styled.img.attrs({
-    src: `${LeafRightSrc}`
+  src: `${LeafRightSrc}`,
 })`
-    align-self: flex-start;
-    z-index: 1;
-`
+  align-self: flex-start;
+  z-index: 1;
+`;
 
 const Layout = styled.div`
   display: flex;
@@ -45,22 +45,22 @@ const ImgDiv = styled.div`
 `;
 
 export const Avatar = styled.img.attrs({
-  src: `${AvatarSrc}`
+  src: `${AvatarSrc}`,
 })`
- position: relative;
- right: 55rem;
- top: 2rem;
- z-index: 15;
-`
+  position: relative;
+  right: 55rem;
+  top: 2rem;
+  z-index: 15;
+`;
 
 export default function Main() {
   return (
     <>
       <Container>
         <Layout>
-        <LeafLeft />
+          <LeafLeft />
           <BtnDiv>
-            <Link to="/main/matching-room">
+            <Link to="/call">
               <MainButton>랜덤 매칭</MainButton>
             </Link>
             <Link to="/main/matching-room">
@@ -75,7 +75,7 @@ export default function Main() {
             <Clock />
           </ImgDiv>
           {/* <Avatar/> */}
-        <LeafRight style={{"position": "relative", "right":"10.5rem"}} />
+          <LeafRight style={{ position: "relative", right: "10.5rem" }} />
         </Layout>
       </Container>
     </>

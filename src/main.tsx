@@ -11,7 +11,7 @@ import ErrorPage from "./error-page";
 import VideoRoom from "./pages/VideoRoom";
 import { MatchBar } from "./components/VideoRoom/MatchBar";
 import { HiddenMatchBar } from "./components/VideoRoom/HiddenMatchBar";
-
+import { Call } from "./pages/Call";
 
 const router = createBrowserRouter([
   {
@@ -22,21 +22,15 @@ const router = createBrowserRouter([
   {
     path: "/main",
     element: <Main />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/main/matching-room",
-    element: <VideoRoom />,
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <HiddenMatchBar/> },
-      { path: "matched", element: <MatchBar/> },
-    ]
   },
   {
     path: "/main/mypage",
     element: <Mypage />,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/call",
+    element: <Call />,
   },
 ]);
 
