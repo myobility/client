@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { BUTTON } from "../common";
 
@@ -28,15 +29,12 @@ const Animation = styled.div`
   height: 6.3rem;
   background-color: ${BUTTON.gauge};
   border-radius: 54px;
-  /* visibility: hidden; */
+  visibility: hidden;
   opacity: 90%;
   position: relative;
   left: 17.5rem;
-  &:hover {
-    transform: rotateY(90deg);
-    transform-origin: 0 100%;
-    transition: transform 10s;
-  }
+
+  transition: 10s cubic-bezier(0.25, 0.47, 0.12, 0.99);
 `;
 
 const Ptag = styled.div`
@@ -47,10 +45,16 @@ const Ptag = styled.div`
 `;
 
 export const HiddenMatchBar = () => {
+  const loadBar = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    loadBar.current!.style.left = "-16rem";
+  }, []);
+
   return (
     <>
       <HiddenMatchBarStyle>
-        <Animation></Animation>
+        <Animation ref={loadBar}></Animation>
         <Ptag>다른 상대 찾기</Ptag>
       </HiddenMatchBarStyle>
     </>

@@ -15,6 +15,7 @@ import { Coordinates, Position } from "../types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { HiddenMatchBar } from "../components/VideoRoom/HiddenMatchBar";
 import { MatchBar } from "../components/VideoRoom/MatchBar";
+import { ToolDiv } from "../components/VideoRoom/ToolDiv";
 
 const FaceArea = styled.div`
   display: flex;
@@ -51,6 +52,11 @@ const TagsAreaRight = styled.div`
   display: flex;
   align-items: center;
   padding-top: 1rem;
+`;
+
+const RowDiv = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 const GreenDiv = styled.div`
@@ -218,6 +224,7 @@ export default function VideoRoom() {
     console.log("Remoted!!!!!!!!!!!!!!!!!");
     console.log("RemoteStream: ", data.stream);
     remoteVideo.current!.srcObject = data.stream;
+    setIsCalling(true);
   }
 
   const getCurrentLocation = async (): Promise<Coordinates> => {
@@ -310,7 +317,6 @@ export default function VideoRoom() {
     myPeerConnection.addIceCandidate(ice);
     console.log("ice ", ice);
     console.log("ice addIceCandidate()");
-    setIsCalling(true);
   });
 
   useEffect(() => {
@@ -363,11 +369,18 @@ export default function VideoRoom() {
         <MatchInfoDiv>
           {!isCalling && <Matching {...{ isMatched: isMatched }} />}
 
-          {/* <Matching {...{ isMatched: isMatched }} /> */}
-          <Loading />
+          {!isCalling ? <Loading /> : <ToolDiv />}
         </MatchInfoDiv>
-        {/* {isCalling} */}
-        {!isMatched ? <HiddenMatchBar /> : <MatchBar />}
+
+        {!isCalling ? (
+          isMatched ? (
+            <MatchBar />
+          ) : (
+            <HiddenMatchBar />
+          )
+        ) : (
+          <HiddenMatchBar />
+        )}
         {/* <Outlet /> */}
 
         <GreenDiv>
@@ -379,6 +392,7 @@ export default function VideoRoom() {
               ref={remoteVideo}
             />
           </FaceArea>
+          {/* </RowDiv> */}
 
           {!isCalling && (
             <InfoAreaRight>
@@ -386,7 +400,7 @@ export default function VideoRoom() {
               <TagsAreaRight>
                 <TagRight tagName="여행" />
                 <TagRight tagName="노래" />
-                <TagRight tagName="MBTI" />
+                <TagRight tagName="재테크" />
               </TagsAreaRight>
             </InfoAreaRight>
           )}

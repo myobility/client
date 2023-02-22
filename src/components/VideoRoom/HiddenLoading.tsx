@@ -12,6 +12,7 @@ const LoadingContainer = styled.div`
 
   position: relative;
   left: 1rem;
+  visibility: hidden;
 `;
 
 // 주행 중의 무료함을 여가시간으로 보낼 수 있다
@@ -48,7 +49,7 @@ const Wave = styled.div`
   animation: ${wave} 1s ease-in-out infinite;
 `;
 
-const Loading = () => {
+const HiddenLoading = () => {
   return (
     <LoadingContainer>
       <Waveform>
@@ -83,4 +84,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default HiddenLoading;
