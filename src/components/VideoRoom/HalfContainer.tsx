@@ -10,7 +10,6 @@ export const HalfContainer = styled.div`
   padding-left: 1rem;
   padding-right: 4rem;
   z-index: 10;
-
   display: flex;
   flex-direction: column;
   justify-content: center;

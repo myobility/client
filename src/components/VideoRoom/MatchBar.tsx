@@ -12,7 +12,6 @@ const MatchBarStyle = styled.div`
   font-weight: 700;
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(42, 42, 42, 0.25);
-
   display: flex;
   /* visibility: hidden; */
   justify-content: center;
@@ -31,7 +30,6 @@ const Animation = styled.div`
   border-radius: 54px;
   /* visibility: hidden; */
   opacity: 90%;
-
   position: relative;
   left: 17.5rem;
   &:hover {

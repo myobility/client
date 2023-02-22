@@ -43,8 +43,6 @@ export const LeafRight = styled.img.attrs({
 `
 
 export const TagDiv = styled.div`
-  /* background-color: gray; */
-  /* padding: 13rem 60rem 13rem 60rem; */
 `;
 export const TagLine = styled.div<{ margin: string }>`
   margin-left: ${(props) => props.margin};

@@ -18,7 +18,6 @@ export const TagUI = styled.button<any>`
   border: 6px solid ${BUTTON.default};
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
-  /* filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.25)); */
 
   &.checked {
     background: #7caa85;
