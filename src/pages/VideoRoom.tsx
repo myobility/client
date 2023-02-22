@@ -4,7 +4,7 @@ import { TagRight } from "../components/VideoRoom/TagRight";
 import { COLOR } from "../components/common";
 import { HalfContainer } from "../components/VideoRoom/HalfContainer";
 import { GreenContainer } from "../components/VideoRoom/GreenContainer";
-import { FaceDiv } from "../components/VideoRoom/FaceDiv";
+import { FaceDiv, VideoStyle } from "../components/VideoRoom/FaceDiv";
 import { Heartbeat } from "../components/VideoRoom/Heartbeat";
 import { Outlet } from "react-router-dom";
 import { Matching } from "../components/VideoRoom/Matching";
@@ -13,6 +13,8 @@ import Loading from "../components/VideoRoom/Loading";
 import io from "socket.io-client";
 import { Coordinates, Position } from "../types";
 import { useEffect, useRef, useState } from "react";
+import { HiddenMatchBar } from "../components/VideoRoom/HiddenMatchBar";
+import { MatchBar } from "../components/VideoRoom/MatchBar";
 
 const FaceArea = styled.div`
   display: flex;
@@ -240,6 +242,11 @@ export default function VideoRoom() {
     console.log(massage);
     // await initCall();
     setIsMatched(true);
+    handleMatchStart();
+  });
+
+  socket.on("match_start", () => {
+    console.log("match_start");
   });
 
   socket.on("matched", (massage: any) => {
@@ -311,7 +318,10 @@ export default function VideoRoom() {
         <HalfContainer>
           <FaceArea>
             <FaceDiv
+              autoPlay
+              playsInline
               style={{ position: "relative", top: "5.5rem", left: "15rem" }}
+              ref={localVideo}
             />
           </FaceArea>
           <InfoArea>
@@ -325,14 +335,20 @@ export default function VideoRoom() {
           </InfoArea>
         </HalfContainer>
         <MatchInfoDiv>
-          <Matching />
+          <Matching {...{ isMatched: isMatched }} />
           <Loading />
         </MatchInfoDiv>
-        <Outlet />
+
+        {!isMatched ? <HiddenMatchBar /> : <MatchBar />}
+        {/* <Outlet /> */}
+
         <GreenDiv>
           <FaceArea>
             <FaceDiv
+              autoPlay
+              playsInline
               style={{ position: "relative", top: "3.4rem", right: "6rem" }}
+              ref={remoteVideo}
             />
           </FaceArea>
           <InfoAreaRight>
