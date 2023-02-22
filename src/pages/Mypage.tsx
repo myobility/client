@@ -2,11 +2,25 @@ import styled from "styled-components";
 import { Container } from "../components/Container";
 import { BUTTON } from "../components/common";
 import { TagBtn } from "../components/Mypage/TagBtn";
+import { LeafLeft } from "../components/Leafs";
+import LeafRightSrc from "../img/bg_right_leaf.png";
 
-export const Layout = styled.div`
+export const LayoutRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: inherit;
+`;
+
+export const LayoutCol = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
+  left: -6rem;
+  min-width: 86%;
+  z-index: 10;
 `;
 
 export const Title = styled.p`
@@ -19,13 +33,22 @@ export const Title = styled.p`
   padding-bottom: 4rem;
 `;
 
+export const LeafRight = styled.img.attrs({
+  src: `${LeafRightSrc}`
+})`
+  position: relative;
+  right: 18.8rem;
+  align-self: flex-start;
+  z-index: 0;
+`
+
 export const TagDiv = styled.div`
-  /* background-color: gray; */
-  /* padding: 13rem 60rem 13rem 60rem; */
 `;
 export const TagLine = styled.div<{ margin: string }>`
   margin-left: ${(props) => props.margin};
 `;
+
+
 
 export default function Mypage() {
   const tags1 = ["노래", "MBTI", "취미", "카페", "영화"];
@@ -34,26 +57,30 @@ export default function Mypage() {
   return (
     <>
       <Container>
-        <Layout>
-          <Title>나의 관심사를 골라보아요</Title>
-          <TagDiv>
-            <TagLine margin="2rem;">
-              {tags1.map((e) => (
-                <TagBtn tagName={e}></TagBtn>
-              ))}
-            </TagLine>
-            <TagLine margin="6rem;">
-              {tags2.map((e) => (
-                <TagBtn tagName={e}></TagBtn>
-              ))}
-            </TagLine>
-            <TagLine margin="-1rem;">
-              {tags3.map((e) => (
-                <TagBtn tagName={e}></TagBtn>
-              ))}
-            </TagLine>
-          </TagDiv>
-        </Layout>
+        <LayoutRow>
+          <LeafLeft />
+          <LayoutCol>
+            <Title>나의 관심사를 골라보아요</Title>
+            <TagDiv>
+              <TagLine margin="2rem;">
+                {tags1.map((e) => (
+                  <TagBtn tagName={e}></TagBtn>
+                ))}
+              </TagLine>
+              <TagLine margin="6rem;">
+                {tags2.map((e) => (
+                  <TagBtn tagName={e}></TagBtn>
+                ))}
+              </TagLine>
+              <TagLine margin="-1rem;">
+                {tags3.map((e) => (
+                  <TagBtn tagName={e}></TagBtn>
+                ))}
+              </TagLine>
+            </TagDiv>
+          </LayoutCol>
+          <LeafRight />
+        </LayoutRow>
       </Container>
     </>
   );

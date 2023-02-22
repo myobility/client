@@ -1,14 +1,13 @@
-import React, { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+import React, { ButtonHTMLAttributes, DetailedHTMLProps, useState } from "react";
 import styled from "styled-components";
 import { BUTTON } from "../common/index";
 
-export const TagUI = styled.button`
+export const TagUI = styled.button<any>`
   appearance: none;
   width: 341.43px;
   height: 124.59px;
-  /* background: ${(props: any) => (props.toggle ? "none" : "#7caa85")}; */
-  background: none;
-  color: ${BUTTON.default};
+  background: ${props => props.isClicked ? `${BUTTON.default}` :  "none"};
+  color: ${props => props.isClicked ? `${BUTTON.white}` : `${BUTTON.default}`};
   font-weight: 700;
   font-size: 58px;
   outline: 0;
@@ -16,10 +15,9 @@ export const TagUI = styled.button`
   border-radius: 89px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   margin-bottom: 1rem;
-  border: 6px solid #7caa85;
+  border: 6px solid ${BUTTON.default};
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
-  /* filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.25)); */
 
   &.checked {
     background: #7caa85;
@@ -39,9 +37,16 @@ export interface BtnProps
 }
 
 export const TagBtn = (props: BtnProps) => {
+  const [clicked, setClicked] = useState(false);
+
+  const click = () => {
+    setClicked((prev) => !prev);
+    console.log("hello");
+  }
+
   return (
     <>
-      <TagUI>{props.tagName}</TagUI>
+      <TagUI onClick={click} isClicked={clicked} >{props.tagName}</TagUI>
     </>
   );
 };

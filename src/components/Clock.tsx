@@ -12,6 +12,10 @@ export const ClockContainer = styled.div`
   margin: auto;
   line-height: 3rem;
   padding-left: 55rem;
+  
+  position: relative;
+  top: 4rem;
+  left: 2rem;
 `;
 
 export const TimeContainer = styled.div`
@@ -30,13 +34,14 @@ export const StyledClock = styled.div`
 export const DayNight = styled.div`
   font-size: 24px;
   position: relative;
-  top: -13px;
+  bottom: 0.8rem;
+  left: 0.5rem;
 `;
 
 export const StyledDate = styled.div`
-  font-size: 35px;
+  font-size: 30px;
   position: relative;
-  left: 3px;
+  left: 1rem;
 `;
 
 // export const Clock = () => {

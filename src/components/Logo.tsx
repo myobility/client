@@ -16,13 +16,12 @@ export const LogoImg = styled.img.attrs({
     width: 1257px;
     height: 357px;
     margin: auto;
-    padding-bottom: 9rem;
+    padding-bottom: 2rem;
 `
 
 export const Logo = () => {
     return(
         <>
-            {/* <LogoFont>CARMEET</LogoFont> */}
             <LogoImg/>
         </>
     )
