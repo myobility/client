@@ -15,7 +15,6 @@
     "@chakra-ui/react": "^2.5.1",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "agora-rtc-sdk-ng": "^4.16.1",
     "babel-loader": "^9.1.2",
     "framer-motion": "^9.0.4",
     "html-webpack-plugin": "^5.5.0",
