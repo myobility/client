@@ -77,8 +77,8 @@ export default function VideoRoom() {
   const [isCalling, setIsCalling] = useState<boolean>(false);
 
   const socket = io(
-    // "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
-    "http://localhost:3000/", //로컬 테스트용
+    "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
+    // "http://localhost:3000/", //로컬 테스트용
     {
       withCredentials: true,
     }
