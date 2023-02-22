@@ -4,7 +4,7 @@ import { TagRight } from "../components/VideoRoom/TagRight";
 import { COLOR } from "../components/common";
 import { HalfContainer } from "../components/VideoRoom/HalfContainer";
 import { GreenContainer } from "../components/VideoRoom/GreenContainer";
-import { FaceDiv, VideoStyle } from "../components/VideoRoom/FaceDiv";
+import { FaceDiv } from "../components/VideoRoom/FaceDiv";
 import { Heartbeat } from "../components/VideoRoom/Heartbeat";
 import { Outlet } from "react-router-dom";
 import { Matching } from "../components/VideoRoom/Matching";
@@ -307,6 +307,7 @@ export default function VideoRoom() {
     myPeerConnection.addIceCandidate(ice);
     console.log("ice ", ice);
     console.log("ice addIceCandidate()");
+    setIsCalling(true);
   });
 
   useEffect(() => {
@@ -316,34 +317,48 @@ export default function VideoRoom() {
   return (
     <>
       <GreenContainer>
-        <HalfContainer>
+        <HalfContainer
+          style={{
+            left: isCalling ? "initial" : "15rem",
+            minWidth: isCalling ? "initial" : "1122px",
+          }}
+        >
           <FaceArea>
             <FaceDiv
               autoPlay
               playsInline
-              style={{ position: "relative", top: "5.5rem", left: "15rem" }}
+              style={
+                !isCalling
+                  ? {
+                      position: "relative",
+                      top: "5.5rem",
+                      left: "15rem",
+                    }
+                  : {}
+              }
               ref={localVideo}
             />
           </FaceArea>
-          <InfoArea>
-            <Heartbeat bpm={97} />
-            {/* <Loading></Loading> */}
-            <TagsArea>
-              <TagLeft tagName="여행" />
-              <TagLeft tagName="노래" />
-              <TagLeft tagName="MBTI" />
-            </TagsArea>
-          </InfoArea>
-        </HalfContainer>
-        <MatchInfoDiv>
-          {!isCalling ? (
-            <Matching {...{ isMatched: isMatched }} />
-          ) : (
-            <div></div>
+          {!isCalling && (
+            <InfoArea>
+              <Heartbeat bpm={97} />
+              {/* <Loading></Loading> */}
+              <TagsArea>
+                <TagLeft tagName="여행" />
+                <TagLeft tagName="노래" />
+                <TagLeft tagName="MBTI" />
+              </TagsArea>
+            </InfoArea>
           )}
+        </HalfContainer>
+
+        <MatchInfoDiv>
+          {!isCalling && <Matching {...{ isMatched: isMatched }} />}
+
+          {/* <Matching {...{ isMatched: isMatched }} /> */}
           <Loading />
         </MatchInfoDiv>
-
+        {/* {isCalling} */}
         {!isMatched ? <HiddenMatchBar /> : <MatchBar />}
         {/* <Outlet /> */}
 
@@ -356,14 +371,17 @@ export default function VideoRoom() {
               ref={remoteVideo}
             />
           </FaceArea>
-          <InfoAreaRight>
-            <Heartbeat bpm={122} />
-            <TagsAreaRight>
-              <TagRight tagName="여행" />
-              <TagRight tagName="노래" />
-              <TagRight tagName="MBTI" />
-            </TagsAreaRight>
-          </InfoAreaRight>
+
+          {!isCalling && (
+            <InfoAreaRight>
+              <Heartbeat bpm={122} />
+              <TagsAreaRight>
+                <TagRight tagName="여행" />
+                <TagRight tagName="노래" />
+                <TagRight tagName="MBTI" />
+              </TagsAreaRight>
+            </InfoAreaRight>
+          )}
         </GreenDiv>
       </GreenContainer>
     </>

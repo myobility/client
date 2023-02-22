@@ -8,7 +8,6 @@ const ToastStyle = styled.div<any>`
   z-index: 40;
   padding: 1.5rem;
   width: 10rem;
-  margin: auto;
   border-radius: 5rem;
   color: white;
   font-size: 2rem;

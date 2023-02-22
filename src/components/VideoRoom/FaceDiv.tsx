@@ -8,15 +8,3 @@ export const FaceDiv = styled.video`
   z-index: 1;
   object-fit: cover;
 `;
-
-export const VideoStyle = {
-  width: "40rem",
-  height: "40rem",
-  backgroundColor: "white",
-  borderRadius: "25rem",
-  zIndex: "1",
-  position: "relative",
-
-  top: "3.4rem",
-  right: "6rem",
-};
