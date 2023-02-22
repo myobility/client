@@ -12,7 +12,9 @@ import Loading from "../components/VideoRoom/Loading";
 
 import io from "socket.io-client";
 import { Coordinates, Position } from "../types";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { HiddenMatchBar } from "../components/VideoRoom/HiddenMatchBar";
+import { MatchBar } from "../components/VideoRoom/MatchBar";
 
 const FaceArea = styled.div`
   display: flex;
@@ -71,7 +73,8 @@ const MatchInfoDiv = styled.div`
 export default function VideoRoom() {
   const [uid, setUid] = useState<number>(0);
   const [isMatched, setIsMatched] = useState<boolean>(false);
-  const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
+  const [targetUid, setTargetUid] = useState<number>(0);
+  const [isCalling, setIsCalling] = useState<boolean>(false);
 
   const socket = io(
     // "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
@@ -193,9 +196,11 @@ export default function VideoRoom() {
       console.log(error);
     }
     // await initCall();
+    console.log("myUid: ", newUid);
   };
 
   const handleMatchStart = async () => {
+    console.log("타겟UID: ", targetUid);
     socket.emit("join_call", uid, targetUid);
     await initCall();
   };
@@ -242,9 +247,15 @@ export default function VideoRoom() {
     setIsMatched(true);
   });
 
+  socket.on("match_start", () => {
+    console.log("match_start");
+    // handleMatchStart();
+  });
+
   socket.on("matched", (massage: any) => {
     console.log("매칭완료: ", massage);
     setTargetUid(massage);
+    // console.log("타겟넘버 업데이트", targetUid);
   });
 
   socket.on("cancel_match", async () => {
@@ -299,52 +310,91 @@ export default function VideoRoom() {
     myPeerConnection.addIceCandidate(ice);
     console.log("ice ", ice);
     console.log("ice addIceCandidate()");
+    setIsCalling(true);
   });
 
   useEffect(() => {
     handleMatching();
   }, []);
 
+  useEffect(() => {
+    console.log("타겟 업데이트", targetUid);
+    if (targetUid !== 0) handleMatchStart();
+  }, [targetUid]);
+
   return (
     <>
       <GreenContainer>
-        <HalfContainer>
+        <HalfContainer
+          style={{
+            left: isCalling ? "initial" : "15rem",
+            minWidth: isCalling ? "initial" : "1122px",
+          }}
+        >
           <FaceArea>
             <FaceDiv
-              style={{ position: "relative", top: "5.5rem", left: "15rem" }}
+              autoPlay
+              playsInline
+              style={
+                !isCalling
+                  ? {
+                      position: "relative",
+                      top: "5.5rem",
+                      left: "15rem",
+                    }
+                  : {}
+              }
+              ref={localVideo}
             />
           </FaceArea>
-          <InfoArea>
-            <Heartbeat bpm={97} />
-            {/* <Loading></Loading> */}
-            <TagsArea>
-              <TagLeft tagName="여행" />
-              <TagLeft tagName="노래" />
-              <TagLeft tagName="MBTI" />
-            </TagsArea>
-          </InfoArea>
+          {!isCalling && (
+            <InfoArea>
+              <Heartbeat bpm={97} />
+              {/* <Loading></Loading> */}
+              <TagsArea>
+                <TagLeft tagName="여행" />
+                <TagLeft tagName="노래" />
+                <TagLeft tagName="MBTI" />
+              </TagsArea>
+            </InfoArea>
+          )}
         </HalfContainer>
+
         <MatchInfoDiv>
-          <Matching />
+          {!isCalling && <Matching {...{ isMatched: isMatched }} />}
+
+          {/* <Matching {...{ isMatched: isMatched }} /> */}
           <Loading />
         </MatchInfoDiv>
-        <Outlet />
+        {/* {isCalling} */}
+        {!isMatched ? <HiddenMatchBar /> : <MatchBar />}
+        {/* <Outlet /> */}
+
         <GreenDiv>
           <FaceArea>
             <FaceDiv
+              autoPlay
+              playsInline
               style={{ position: "relative", top: "3.4rem", right: "6rem" }}
+              ref={remoteVideo}
             />
           </FaceArea>
-          <InfoAreaRight>
-            <Heartbeat bpm={122} />
-            <TagsAreaRight>
-              <TagRight tagName="여행" />
-              <TagRight tagName="노래" />
-              <TagRight tagName="MBTI" />
-            </TagsAreaRight>
-          </InfoAreaRight>
+
+          {!isCalling && (
+            <InfoAreaRight>
+              <Heartbeat bpm={122} />
+              <TagsAreaRight>
+                <TagRight tagName="여행" />
+                <TagRight tagName="노래" />
+                <TagRight tagName="MBTI" />
+              </TagsAreaRight>
+            </InfoAreaRight>
+          )}
         </GreenDiv>
       </GreenContainer>
+
+      <h1>UID는 {uid}</h1>
+      <h1>TARGET은 {targetUid}</h1>
     </>
   );
 }

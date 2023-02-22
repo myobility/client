@@ -9,9 +9,8 @@ const LoadingContainer = styled.div`
   align-items: center;
   /* height: 100vh; */
   z-index: 30;
-  
+
   position: relative;
-  bottom: 19rem;
 `;
 
 // 주행 중의 무료함을 여가시간으로 보낼 수 있다

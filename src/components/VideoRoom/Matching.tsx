@@ -3,11 +3,11 @@ import styled, { ThemeProvider } from "styled-components";
 import { BUTTON } from "../common";
 
 const ToastStyle = styled.div<any>`
-  background-color: ${props => props.isMatched ? `${BUTTON.default}` : `${BUTTON.pressed}`};
+  background-color: ${(props) =>
+    props.isMatched ? `${BUTTON.default}` : `${BUTTON.pressed}`};
   z-index: 40;
   padding: 1.5rem;
   width: 10rem;
-  margin: auto;
   border-radius: 5rem;
   color: white;
   font-size: 2rem;
@@ -18,7 +18,7 @@ const ToastStyle = styled.div<any>`
   align-items: center;
   position: relative;
   bottom: 14rem;
-/* 
+  /* 
   @keyframes slideIn {
   from {
     transform: translateX(-100%);
@@ -36,20 +36,16 @@ const ToastStyle = styled.div<any>`
   }
 }*/
 `;
+interface MatchingProps {
+  isMatched: boolean;
+}
 
-export const Matching = () => {
-  const [matching, setMatching] = useState(true);
-
-  const matched = () => {
-    setMatching((prev) => !prev);
-    console.log("hello");
-  };
-
+export const Matching = (prop: MatchingProps) => {
   return (
     <>
-        <ToastStyle onClick={matched} className="matching" isMatched={matching}>
-          {matching ? "탐색 중" : "매칭 완료!"}
-        </ToastStyle>
+      <ToastStyle className="matching" isMatched={prop.isMatched}>
+        {!prop.isMatched ? "탐색 중" : "매칭 완료!"}
+      </ToastStyle>
     </>
   );
 };
