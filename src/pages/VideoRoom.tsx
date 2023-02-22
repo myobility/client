@@ -75,6 +75,8 @@ export default function VideoRoom() {
   const [isMatched, setIsMatched] = useState<boolean>(false);
   const [targetUid, setTargetUid] = useState<number>(0);
   const [isCalling, setIsCalling] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [isCamera, setIsCamera] = useState<boolean>(false);
 
   const socket = io(
     // "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
@@ -86,9 +88,7 @@ export default function VideoRoom() {
   const localVideo = useRef<HTMLVideoElement>(null);
   const remoteVideo = useRef<HTMLVideoElement>(null);
 
-  let myStream: any;
-  let muted = false;
-  let cameraOff = false;
+  let myStream: MediaStream;
   let myPeerConnection: any;
   let myDataChannel;
 
@@ -134,30 +134,24 @@ export default function VideoRoom() {
     }
   };
   function handleMuteClick() {
+    console.log(myStream);
     myStream
       .getAudioTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
-    if (!muted) {
-      // muteBtn.current.innerText = "Unmute";
-      muted = true;
-    } else {
-      // muteBtn.current.innerText = "Mute";
-      muted = false;
-    }
+    setIsMuted(!isMuted);
   }
 
   function handleCameraClick() {
+    console.log(myStream);
     myStream
       .getVideoTracks()
       .forEach((track: any) => (track.enabled = !track.enabled));
-    if (cameraOff) {
-      // cameraBtn.current.innerText = "Turn Camera Off";
-      cameraOff = false;
-    } else {
-      // cameraBtn.current.innerText = "Turn Camera On";
-      cameraOff = true;
-    }
+    setIsCamera(!isCamera);
   }
+
+  const handleEndCall = () => {
+    window.location.href = "/";
+  };
 
   const initCall = async () => {
     await getMedia();
@@ -395,6 +389,13 @@ export default function VideoRoom() {
 
       <h1>UID는 {uid}</h1>
       <h1>TARGET은 {targetUid}</h1>
+      <button onClick={handleMuteClick}>
+        {isMatched ? "소리재생중" : "음소거"}
+      </button>
+      <button onClick={handleCameraClick}>
+        {isCamera ? "카메라 ON" : "카메라 OFF"}
+      </button>
+      <button onClick={handleEndCall}>통화종료</button>
     </>
   );
 }
