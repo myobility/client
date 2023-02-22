@@ -1,9 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import Main from "./pages/Main";
 import Mypage from "./pages/Mypage";
@@ -32,11 +29,14 @@ const router = createBrowserRouter([
     path: "/call",
     element: <Call />,
   },
+  {
+    path: "/videoroom",
+    element: <VideoRoom />,
+  },
 ]);
-
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
