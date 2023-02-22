@@ -29,12 +29,11 @@ const Animation = styled.div<any>`
   height: 6.3rem;
   background-color: ${BUTTON.gauge};
   border-radius: 54px;
-  /* visibility: hidden; */
   opacity: 90%;
   position: relative;
   left: 17.5rem;
 
-  transition: 10s cubic-bezier(0.25, 0.47, 0.12, 0.99);
+  transition: 2s cubic-bezier(0.4, 0, 1, 1);
 `;
 
 const Ptag = styled.div`
@@ -45,16 +44,17 @@ const Ptag = styled.div`
 `;
 
 export const MatchBar = () => {
-  const loadBar = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    loadBar.current!.style.left = "-16rem";
+    setTimeout(
+      () => (document.getElementById("loader")!.style.left = "-17.5rem"),
+      500
+    );
   }, []);
 
   return (
     <>
       <MatchBarStyle>
-        <Animation ref={loadBar}></Animation>
+        <Animation id="loader"></Animation>
         <Ptag>다른 상대 찾기</Ptag>
       </MatchBarStyle>
     </>
