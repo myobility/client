@@ -74,6 +74,7 @@ export default function VideoRoom() {
   const [uid, setUid] = useState<number>(0);
   const [isMatched, setIsMatched] = useState<boolean>(false);
   const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
+  const [isCalling, setIsCalling] = useState<boolean>(false);
 
   const socket = io(
     // "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
@@ -242,11 +243,11 @@ export default function VideoRoom() {
     console.log(massage);
     // await initCall();
     setIsMatched(true);
-    handleMatchStart();
   });
 
   socket.on("match_start", () => {
     console.log("match_start");
+    handleMatchStart();
   });
 
   socket.on("matched", (massage: any) => {
@@ -335,7 +336,11 @@ export default function VideoRoom() {
           </InfoArea>
         </HalfContainer>
         <MatchInfoDiv>
-          <Matching {...{ isMatched: isMatched }} />
+          {!isCalling ? (
+            <Matching {...{ isMatched: isMatched }} />
+          ) : (
+            <div></div>
+          )}
           <Loading />
         </MatchInfoDiv>
 

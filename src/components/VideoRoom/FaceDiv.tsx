@@ -6,6 +6,7 @@ export const FaceDiv = styled.video`
   background: white;
   border-radius: 25rem;
   z-index: 1;
+  object-fit: cover;
 `;
 
 export const VideoStyle = {
