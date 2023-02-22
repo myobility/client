@@ -9,7 +9,6 @@ import VideoRoom from "./pages/VideoRoom";
 import { MatchBar } from "./components/VideoRoom/MatchBar";
 import { HiddenMatchBar } from "./components/VideoRoom/HiddenMatchBar";
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -26,9 +25,9 @@ const router = createBrowserRouter([
     element: <VideoRoom />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <HiddenMatchBar/> },
-      { path: "matched", element: <MatchBar/> },
-    ]
+      { index: true, element: <HiddenMatchBar /> },
+      { path: "matched", element: <MatchBar /> },
+    ],
   },
   {
     path: "/main/mypage",
@@ -42,7 +41,5 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <RouterProvider router={router} />
 );

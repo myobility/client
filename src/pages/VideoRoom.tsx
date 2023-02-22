@@ -12,7 +12,7 @@ import Loading from "../components/VideoRoom/Loading";
 
 import io from "socket.io-client";
 import { Coordinates, Position } from "../types";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { HiddenMatchBar } from "../components/VideoRoom/HiddenMatchBar";
 import { MatchBar } from "../components/VideoRoom/MatchBar";
 
@@ -73,12 +73,12 @@ const MatchInfoDiv = styled.div`
 export default function VideoRoom() {
   const [uid, setUid] = useState<number>(0);
   const [isMatched, setIsMatched] = useState<boolean>(false);
-  const [targetUid, setTargetUid] = useState<number | undefined>(undefined);
+  const [targetUid, setTargetUid] = useState<number>(0);
   const [isCalling, setIsCalling] = useState<boolean>(false);
 
   const socket = io(
-    "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
-    // "http://localhost:3000/", //로컬 테스트용
+    // "https://port-0-server-node-luj2cle9ghnxl.sel3.cloudtype.app",
+    "http://localhost:3000/", //로컬 테스트용
     {
       withCredentials: true,
     }
@@ -196,9 +196,11 @@ export default function VideoRoom() {
       console.log(error);
     }
     // await initCall();
+    console.log("myUid: ", newUid);
   };
 
   const handleMatchStart = async () => {
+    console.log("타겟UID: ", targetUid);
     socket.emit("join_call", uid, targetUid);
     await initCall();
   };
@@ -247,12 +249,13 @@ export default function VideoRoom() {
 
   socket.on("match_start", () => {
     console.log("match_start");
-    handleMatchStart();
+    // handleMatchStart();
   });
 
   socket.on("matched", (massage: any) => {
     console.log("매칭완료: ", massage);
     setTargetUid(massage);
+    // console.log("타겟넘버 업데이트", targetUid);
   });
 
   socket.on("cancel_match", async () => {
@@ -313,6 +316,11 @@ export default function VideoRoom() {
   useEffect(() => {
     handleMatching();
   }, []);
+
+  useEffect(() => {
+    console.log("타겟 업데이트", targetUid);
+    if (targetUid !== 0) handleMatchStart();
+  }, [targetUid]);
 
   return (
     <>
@@ -384,6 +392,9 @@ export default function VideoRoom() {
           )}
         </GreenDiv>
       </GreenContainer>
+
+      <h1>UID는 {uid}</h1>
+      <h1>TARGET은 {targetUid}</h1>
     </>
   );
 }
