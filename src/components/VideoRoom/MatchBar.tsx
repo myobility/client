@@ -33,7 +33,7 @@ const Animation = styled.div<any>`
   position: relative;
   left: 17.5rem;
 
-  transition: 2s cubic-bezier(0.4, 0, 1, 1);
+  transition: 4s cubic-bezier(0.4, 0, 1, 1);
 `;
 
 const Ptag = styled.div`
