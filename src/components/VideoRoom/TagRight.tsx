@@ -14,7 +14,6 @@ export const TagUI = styled.div`
   border-radius: 89px;
   box-shadow: 0px 4px 10px rgba(42, 42, 42, 0.25);
   margin-left: 1.3rem;
-
   display: flex;
   justify-content: center;
   align-items: center;

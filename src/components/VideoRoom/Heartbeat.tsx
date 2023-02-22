@@ -10,7 +10,6 @@ export const HeartDiv = styled.div`
   font-size: 3.5rem;
   color: white;
   font-size: 3.6rem;
-
   display: flex;
   justify-content: space-evenly;
   align-items: center;

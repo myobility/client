@@ -13,7 +13,6 @@ const ToastStyle = styled.div<any>`
   font-size: 2rem;
   font-weight: 500;
   box-shadow: 0px 4px 10px rgba(42, 42, 42, 0.25);
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +27,6 @@ const ToastStyle = styled.div<any>`
     transform: translateX(0%);
   }
 }
-
 @keyframes slideOut {
   from {
     transform: translateX(0%);
@@ -44,6 +42,7 @@ export const Matching = () => {
 
   const matched = () => {
     setMatching((prev) => !prev);
+    console.log("hello");
   };
 
   return (
