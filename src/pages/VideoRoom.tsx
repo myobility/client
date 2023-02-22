@@ -52,7 +52,7 @@ const GreenDiv = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-  right: 22rem;
+  right: 10rem;
 `;
 
 const MatchInfoDiv = styled.div`
@@ -77,7 +77,6 @@ export default function VideoRoom() {
           </FaceArea>
           <InfoArea>
             <Heartbeat bpm={97} />
-            {/* <Loading></Loading> */}
             <TagsArea>
               <TagLeft tagName="여행" />
               <TagLeft tagName="노래" />

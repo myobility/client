@@ -14,9 +14,6 @@ const LoadingContainer = styled.div`
   bottom: 19rem;
 `;
 
-// 주행 중의 무료함을 여가시간으로 보낼 수 있다
-// 필터 효과로 재미를 더한다
-// 현재 주행 중인 다른 누군가와 매칭됨으로서 공감형성
 const wave = keyframes`
   0% {
     height: 10px;

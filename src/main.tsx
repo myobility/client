@@ -9,8 +9,6 @@ import Main from "./pages/Main";
 import Mypage from "./pages/Mypage";
 import ErrorPage from "./error-page";
 import VideoRoom from "./pages/VideoRoom";
-import { MatchBar } from "./components/VideoRoom/MatchBar";
-import { HiddenMatchBar } from "./components/VideoRoom/HiddenMatchBar";
 import { Call } from "./pages/Call";
 
 const router = createBrowserRouter([
@@ -32,6 +30,10 @@ const router = createBrowserRouter([
     path: "/call",
     element: <Call />,
   },
+  {
+    path: "/main/room",
+    element: <VideoRoom/>,
+  }
 ]);
 
 
