@@ -21,13 +21,9 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/main/matching-room",
+    path: "/main/matching-room/matched",
     element: <VideoRoom />,
     errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <HiddenMatchBar /> },
-      { path: "matched", element: <MatchBar /> },
-    ],
   },
   {
     path: "/main/mypage",

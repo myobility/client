@@ -41,7 +41,7 @@ export const DayNight = styled.div`
 export const StyledDate = styled.div`
   font-size: 30px;
   position: relative;
-  left: 1rem;
+  left: 0.4rem;
 `;
 
 // export const Clock = () => {

@@ -73,7 +73,7 @@ const MatchInfoDiv = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  right: 1rem;
+  /* right: 1rem; */
 `;
 
 export default function VideoRoom() {
@@ -89,7 +89,9 @@ export default function VideoRoom() {
       withCredentials: true,
     }
   );
+  const localDiv = useRef<HTMLDivElement>(null);
   const localVideo = useRef<HTMLVideoElement>(null);
+  const remoteDiv = useRef<HTMLDivElement>(null);
   const remoteVideo = useRef<HTMLVideoElement>(null);
 
   let myStream: any;
@@ -221,10 +223,10 @@ export default function VideoRoom() {
   }
 
   function handleAddStream(data: any) {
+    setIsCalling(true);
     console.log("Remoted!!!!!!!!!!!!!!!!!");
     console.log("RemoteStream: ", data.stream);
     remoteVideo.current!.srcObject = data.stream;
-    setIsCalling(true);
   }
 
   const getCurrentLocation = async (): Promise<Coordinates> => {
@@ -275,10 +277,7 @@ export default function VideoRoom() {
   socket.on("welcome", async (target_uid: any) => {
     console.log("상대방이 연결을 하여씁니다.");
     await initCall();
-    // myDataChannel = myPeerConnection.createDataChannel("chat");
-    // myDataChannel.addEventListener("message", (event: any) =>
-    //   console.log(event.data)
-    // );
+
     console.log("made data channel");
     const offer = await myPeerConnection.createOffer();
     console.log("welcome createOffer()");
@@ -288,12 +287,7 @@ export default function VideoRoom() {
   });
 
   socket.on("offer", async (offer: any) => {
-    // myPeerConnection.addEventListener("datachannel", (event: any) => {
-    //   myDataChannel = event.channel;
-    //   myDataChannel.addEventListener("message", (event: any) =>
-    //     console.log(event.data)
-    //   );
-    // });
+
     console.log("received the offer");
     myPeerConnection.setRemoteDescription(offer);
     console.log("offer setRemoteDescription()");
@@ -330,11 +324,14 @@ export default function VideoRoom() {
 
   return (
     <>
-      <GreenContainer>
+      <GreenContainer
+        style={{ justifyContent: isCalling ? "space-between" : "center" }}
+      >
         <HalfContainer
           style={{
             left: isCalling ? "initial" : "15rem",
             minWidth: isCalling ? "initial" : "1122px",
+            paddingRight: !isCalling ? "4rem" : "1rem",
           }}
         >
           <FaceArea>
@@ -348,7 +345,11 @@ export default function VideoRoom() {
                       top: "5.5rem",
                       left: "15rem",
                     }
-                  : {}
+                  : {
+                      width: "35rem",
+                      height: "35rem",
+                      padding: "0",
+                    }
               }
               ref={localVideo}
             />
@@ -356,7 +357,6 @@ export default function VideoRoom() {
           {!isCalling && (
             <InfoArea>
               <Heartbeat bpm={97} />
-              {/* <Loading></Loading> */}
               <TagsArea>
                 <TagLeft tagName="여행" />
                 <TagLeft tagName="노래" />
@@ -379,16 +379,30 @@ export default function VideoRoom() {
             <HiddenMatchBar />
           )
         ) : (
-          <HiddenMatchBar />
+          <></>
         )}
-        {/* <Outlet /> */}
 
-        <GreenDiv>
+        <GreenDiv
+          style={{
+            right: !isCalling ? "22rem" : "0",
+            justifyContent: "center",
+          }}
+        >
           <FaceArea>
             <FaceDiv
               autoPlay
               playsInline
-              style={{ position: "relative", top: "3.4rem", right: "6rem" }}
+              style={{
+                position: "relative",
+
+                width: !isCalling ? "40rem" : "80rem",
+                height: !isCalling ? "40rem" : "700px",
+                borderRadius: !isCalling ? "25rem" : "350px",
+                top: !isCalling ? "3.4rem" : "0",
+                right: !isCalling ? "6rem" : "0",
+                transition: "all 1s ease-in-out 0s",
+                marginRight: isCalling ? "5rem" : "0",
+              }}
               ref={remoteVideo}
             />
           </FaceArea>
@@ -406,9 +420,6 @@ export default function VideoRoom() {
           )}
         </GreenDiv>
       </GreenContainer>
-
-      <h1>UID는 {uid}</h1>
-      <h1>TARGET은 {targetUid}</h1>
     </>
   );
 }
